@@ -1,25 +1,26 @@
-# Use official Node image
 FROM node:18
-
 WORKDIR /app
 
-# Copy package.json (and package-lock.json if you want)
+# Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies (use npm install instead of npm ci)
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the app
+# Copy all files
 COPY . .
 
 # Build React app
 RUN npm run build
 
-# Install serve globally to serve the build
+# Install serve globally
 RUN npm install -g serve
 
-# Expose port 5000
+# Set the port Railway expects
+ENV PORT 5000
+
+# Expose port
 EXPOSE 5000
 
-# Start the app
+# Start app in foreground using $PORT
 CMD ["serve", "-s", "build", "-l", "5000"]
